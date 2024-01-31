@@ -15,6 +15,7 @@ const Task = ({ task, toggleCompleted, editTask, deleteTask }) => {
     }
 
     return (
+        
         <li className="task-list__task">
             <FontAwesomeIcon 
                 icon={task.completed ? faCheckSquare : faSquare}
@@ -51,6 +52,7 @@ const Task = ({ task, toggleCompleted, editTask, deleteTask }) => {
                 />
             </div>
         </li>
+        
     );
 }
 

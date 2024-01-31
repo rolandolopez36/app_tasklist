@@ -3,47 +3,46 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlusSquare } from "@fortawesome/free-solid-svg-icons";
 import { v4 as uuidv4 } from 'uuid';
 
-// TaskForm component for adding new tasks
 const TaskForm = ({ tasks, setTasks }) => {
     const [taskInput, setTaskInput] = useState('');
-    
-    const handleSubmit = (e) => {
-        e.preventDefault(); // Prevents the default form submit action
+    const [error, setError] = useState(''); // Estado para manejar errores de validación
 
-        const taskText = taskInput.trim(); // Removes leading and trailing whitespace
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const taskText = taskInput.trim();
 
         if (!taskText) {
-            // If the input is empty (after trimming), show an alert
-            alert("Please enter a task.");
-            return; // Exits the function to prevent adding an empty task
+            alert("Please enter a task."); // Configura un mensaje de error
+            return;
         }
 
-        // Adds the new task to the state, using the previous state to preserve existing tasks
-        setTasks([
-            ...tasks,
-            {
-                id: uuidv4(), // Generates a unique ID for each task
-                text: taskText, // Uses the cleaned task text
-                completed: false // Initially, the task is not completed
-            }
-        ]);
+        setTasks(prevTasks => [...prevTasks, {
+            id: uuidv4(),
+            text: taskText,
+            completed: false
+        }]);
 
-        setTaskInput(''); // Clears the input field after adding the task
+        setTaskInput('');
+        setError(''); // Limpia el error si la tarea se agrega con éxito
     };
 
     return (
+        <div className="task-form__wrapper">
         <form className="task-form" onSubmit={handleSubmit}>
+            {error && <div className="task-form__error">{error}</div>} {/* Muestra errores de validación */}
             <input
                 type="text"
                 className="task-form__input"
                 placeholder="Enter a task"
                 onChange={(e) => setTaskInput(e.target.value)}
                 value={taskInput}
+                aria-label="Task" // Mejora en accesibilidad
             />
-            <button className="task-form__btn" type="submit">
-                <FontAwesomeIcon icon={faPlusSquare} className="task-form__icon-btn" />
+            <button className="task-form__btn" type="submit" aria-label="Add task">
+                <FontAwesomeIcon icon={faPlusSquare} />
             </button>
         </form>
+    </div>
     );
 }
 
